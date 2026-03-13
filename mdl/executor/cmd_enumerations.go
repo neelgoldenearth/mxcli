@@ -86,7 +86,8 @@ func (e *Executor) findEnumeration(moduleName, enumName string) *model.Enumerati
 	}
 
 	for _, enum := range enums {
-		modName := h.GetModuleName(enum.ContainerID)
+		modID := h.FindModuleID(enum.ContainerID)
+		modName := h.GetModuleName(modID)
 		if enum.Name == enumName && modName == moduleName {
 			return enum
 		}
@@ -216,7 +217,8 @@ func (e *Executor) describeEnumeration(name ast.QualifiedName) error {
 	}
 
 	for _, enum := range enums {
-		modName := h.GetModuleName(enum.ContainerID)
+		modID := h.FindModuleID(enum.ContainerID)
+		modName := h.GetModuleName(modID)
 		if enum.Name == name.Name && (name.Module == "" || modName == name.Module) {
 			// Output JavaDoc documentation if present
 			if enum.Documentation != "" {
