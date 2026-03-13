@@ -54,6 +54,10 @@ func (fb *flowBuilder) validateStatements(stmts []ast.MicroflowStatement) {
 func (fb *flowBuilder) validateStatement(stmt ast.MicroflowStatement) {
 	switch s := stmt.(type) {
 	case *ast.DeclareStmt:
+		// Check for duplicate variable declaration
+		if fb.isVariableDeclared(s.Variable) {
+			fb.addError("duplicate variable name '$%s' — variable is already declared (CE0111)", s.Variable)
+		}
 		// Register the variable as declared
 		if s.Type.EntityRef != nil {
 			// Entity type declaration
@@ -182,6 +186,10 @@ func (fb *flowBuilder) validateStatement(stmt ast.MicroflowStatement) {
 		// No error handling to validate
 
 	case *ast.RetrieveStmt:
+		// Check for duplicate variable — RETRIEVE implicitly declares the variable
+		if s.Variable != "" && fb.isVariableDeclared(s.Variable) {
+			fb.addError("duplicate variable name '$%s' — RETRIEVE implicitly declares the variable, remove the preceding DECLARE (CE0111)", s.Variable)
+		}
 		// Register retrieved variable
 		if s.Variable != "" && s.Source.Module != "" {
 			if s.Limit == "1" {

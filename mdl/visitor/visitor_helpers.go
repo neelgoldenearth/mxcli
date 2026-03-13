@@ -90,9 +90,14 @@ func buildQualifiedName(ctx parser.IQualifiedNameContext) ast.QualifiedName {
 		return ast.QualifiedName{Name: identifierOrKeywordText(parts[0])}
 	}
 	if len(parts) >= 2 {
+		// Join parts[1:] to preserve 3+ part names like Module.Enum.Value
+		remaining := make([]string, len(parts)-1)
+		for i, p := range parts[1:] {
+			remaining[i] = identifierOrKeywordText(p)
+		}
 		return ast.QualifiedName{
 			Module: identifierOrKeywordText(parts[0]),
-			Name:   identifierOrKeywordText(parts[1]),
+			Name:   strings.Join(remaining, "."),
 		}
 	}
 	return ast.QualifiedName{}

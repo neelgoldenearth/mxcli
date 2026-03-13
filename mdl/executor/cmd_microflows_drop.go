@@ -34,6 +34,12 @@ func (e *Executor) execDropMicroflow(s *ast.DropMicroflowStmt) error {
 			if err := e.writer.DeleteMicroflow(mf.ID); err != nil {
 				return fmt.Errorf("failed to delete microflow: %w", err)
 			}
+			// Clear executor-level caches so subsequent CREATE sees fresh state
+			qualifiedName := s.Name.Module + "." + s.Name.Name
+			if e.cache != nil && e.cache.createdMicroflows != nil {
+				delete(e.cache.createdMicroflows, qualifiedName)
+			}
+			e.invalidateHierarchy()
 			fmt.Fprintf(e.output, "Dropped microflow: %s.%s\n", s.Name.Module, s.Name.Name)
 			return nil
 		}
