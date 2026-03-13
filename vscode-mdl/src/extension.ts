@@ -73,6 +73,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.window.registerTreeDataProvider('mendixProjectTree', treeProvider)
 	);
+	context.subscriptions.push({ dispose: () => treeProvider.dispose() });
 
 	// --- MDL Content Provider (virtual documents) ---
 	const contentProvider = new MdlContentProvider();

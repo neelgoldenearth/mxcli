@@ -18,11 +18,15 @@ export class MendixProjectTreeProvider implements vscode.TreeDataProvider<Mendix
 	private treeData: MendixTreeNode[] = [];
 	private mxcliPath: string;
 	private mprPath: string | undefined;
+	private pendingLoad: Promise<MendixTreeNode[]> | undefined;
+	private refreshPending = false;
+	private fileWatchers: vscode.FileSystemWatcher[] = [];
 
 	constructor() {
 		const config = vscode.workspace.getConfiguration('mdl');
 		this.mxcliPath = resolvedMxcliPath();
 		this.mprPath = this.resolveMprPath(config);
+		this.setupFileWatchers();
 	}
 
 	refresh(): void {
@@ -30,7 +34,47 @@ export class MendixProjectTreeProvider implements vscode.TreeDataProvider<Mendix
 		this.mxcliPath = resolvedMxcliPath();
 		this.mprPath = this.resolveMprPath(config);
 		this.treeData = [];
+		// If a load is in progress, mark that a refresh is needed after it finishes
+		if (this.pendingLoad) {
+			this.refreshPending = true;
+		}
+		this.pendingLoad = undefined;
 		this._onDidChangeTreeData.fire();
+	}
+
+	dispose(): void {
+		for (const w of this.fileWatchers) {
+			w.dispose();
+		}
+		this.fileWatchers = [];
+	}
+
+	private setupFileWatchers(): void {
+		// Watch .mpr files (v1 format) and mprcontents/ (v2 format)
+		const mprWatcher = vscode.workspace.createFileSystemWatcher('**/*.mpr');
+		const mprContentsWatcher = vscode.workspace.createFileSystemWatcher('**/mprcontents/**');
+
+		const debounceRefresh = this.createDebouncedRefresh(1000);
+
+		mprWatcher.onDidChange(() => debounceRefresh());
+		mprContentsWatcher.onDidChange(() => debounceRefresh());
+		mprContentsWatcher.onDidCreate(() => debounceRefresh());
+		mprContentsWatcher.onDidDelete(() => debounceRefresh());
+
+		this.fileWatchers.push(mprWatcher, mprContentsWatcher);
+	}
+
+	private createDebouncedRefresh(delayMs: number): () => void {
+		let timer: ReturnType<typeof setTimeout> | undefined;
+		return () => {
+			if (timer) {
+				clearTimeout(timer);
+			}
+			timer = setTimeout(() => {
+				timer = undefined;
+				this.refresh();
+			}, delayMs);
+		};
 	}
 
 	getTreeItem(element: MendixTreeNode): vscode.TreeItem {
@@ -76,12 +120,27 @@ export class MendixProjectTreeProvider implements vscode.TreeDataProvider<Mendix
 			return Promise.resolve(element.children || []);
 		}
 
-		// Root level: load tree data if not yet loaded
+		// Root level: return cached data if available
 		if (this.treeData.length > 0) {
 			return Promise.resolve(this.treeData);
 		}
 
-		return this.loadProjectTree();
+		// Deduplicate concurrent loads: reuse pending promise if one exists
+		if (this.pendingLoad) {
+			return this.pendingLoad;
+		}
+
+		this.pendingLoad = this.loadProjectTree().then((data) => {
+			this.pendingLoad = undefined;
+			// If a refresh was requested while loading, re-trigger
+			if (this.refreshPending) {
+				this.refreshPending = false;
+				this.treeData = [];
+				this._onDidChangeTreeData.fire();
+			}
+			return data;
+		});
+		return this.pendingLoad;
 	}
 
 	private resolveMprPath(config: vscode.WorkspaceConfiguration): string | undefined {
