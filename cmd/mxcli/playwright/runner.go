@@ -138,6 +138,10 @@ func Verify(opts VerifyOptions) (*SuiteResult, error) {
 	if timeout == 0 {
 		timeout = 2 * time.Minute
 	}
+	projectDir := ""
+	if opts.ProjectPath != "" {
+		projectDir = filepath.Dir(opts.ProjectPath)
+	}
 
 	// Step 1: Discover test scripts
 	scripts, err := discoverScripts(opts.TestFiles)
@@ -183,7 +187,7 @@ func Verify(opts VerifyOptions) (*SuiteResult, error) {
 		name := scriptName(script)
 		fmt.Fprintf(w, "  [%d/%d] %s... ", i+1, len(scripts), name)
 
-		sr := runScript(script, timeout, opts.Verbose, w)
+		sr := runScript(script, projectDir, timeout, opts.Verbose, w)
 		result.Scripts = append(result.Scripts, sr)
 
 		if opts.Color {
@@ -287,7 +291,10 @@ func discoverScripts(paths []string) ([]string, error) {
 }
 
 // runScript executes a single .test.sh script and returns the result.
-func runScript(path string, timeout time.Duration, verbose bool, w io.Writer) ScriptResult {
+// projectDir is used as the working directory so playwright-cli can find
+// the session socket opened by the runner. Falls back to the script's
+// parent directory if projectDir is empty.
+func runScript(path string, projectDir string, timeout time.Duration, verbose bool, w io.Writer) ScriptResult {
 	start := time.Now()
 	name := scriptName(path)
 
@@ -303,8 +310,13 @@ func runScript(path string, timeout time.Duration, verbose bool, w io.Writer) Sc
 		cmd.Stderr = &stderr
 	}
 
-	// Set working directory to the script's parent
-	cmd.Dir = filepath.Dir(path)
+	// Use project directory as CWD so playwright-cli finds the session
+	// socket and config. Fall back to script's parent if no project set.
+	if projectDir != "" {
+		cmd.Dir = projectDir
+	} else {
+		cmd.Dir = filepath.Dir(path)
+	}
 
 	done := make(chan error, 1)
 	if err := cmd.Start(); err != nil {

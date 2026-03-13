@@ -81,7 +81,7 @@ func TestRunScriptPass(t *testing.T) {
 	os.WriteFile(f, []byte("#!/bin/bash\necho 'PASS: smoke'\n"), 0755)
 
 	var buf bytes.Buffer
-	result := runScript(f, 10e9, false, &buf)
+	result := runScript(f, "", 10e9, false, &buf)
 	if result.Status != StatusPass {
 		t.Errorf("expected PASS, got %s: %s", result.Status, result.Message)
 	}
@@ -93,7 +93,7 @@ func TestRunScriptFail(t *testing.T) {
 	os.WriteFile(f, []byte("#!/bin/bash\necho 'widget not found'\nexit 1\n"), 0755)
 
 	var buf bytes.Buffer
-	result := runScript(f, 10e9, false, &buf)
+	result := runScript(f, "", 10e9, false, &buf)
 	if result.Status != StatusFail {
 		t.Errorf("expected FAIL, got %s", result.Status)
 	}
