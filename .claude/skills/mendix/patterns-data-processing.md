@@ -84,6 +84,19 @@ END;
 
 ## Aggregate Patterns
 
+Aggregates use **function-call syntax** — there is no `AGGREGATE` keyword.
+
+| Function | Syntax | Returns |
+|----------|--------|---------|
+| COUNT | `$n = COUNT($list)` | Integer |
+| SUM | `$n = SUM($list.Attr)` | Decimal |
+| AVERAGE | `$n = AVERAGE($list.Attr)` | Decimal |
+| MINIMUM | `$n = MINIMUM($list.Attr)` | Same as attribute |
+| MAXIMUM | `$n = MAXIMUM($list.Attr)` | Same as attribute |
+
+**Important:** RETRIEVE implicitly declares its variable — do NOT add a separate DECLARE
+before RETRIEVE, or you'll get CE0111 "Duplicate variable name".
+
 ### Count Items
 
 ```mdl
@@ -93,13 +106,10 @@ END;
 CREATE MICROFLOW Module.CountActiveCustomers ()
 RETURNS Integer
 BEGIN
-  DECLARE $Customers List of Module.Customer = empty;
-  DECLARE $Count Integer = 0;
-
   RETRIEVE $Customers FROM Module.Customer
     WHERE IsActive = true;
 
-  $Count = AGGREGATE $Customers COUNT;
+  $Count = COUNT($Customers);
   RETURN $Count;
 END;
 /
@@ -116,13 +126,10 @@ CREATE MICROFLOW Module.GetCustomerTotalOrders (
 )
 RETURNS Decimal
 BEGIN
-  DECLARE $Orders List of Module.Order = empty;
-  DECLARE $Total Decimal = 0;
-
   RETRIEVE $Orders FROM Module.Order
     WHERE Module.Order_Customer = $Customer;
 
-  $Total = AGGREGATE $Orders SUM OF Amount;
+  $Total = SUM($Orders.Amount);
   RETURN $Total;
 END;
 /
@@ -137,15 +144,19 @@ END;
 CREATE MICROFLOW Module.GetAverageOrderValue ()
 RETURNS Decimal
 BEGIN
-  DECLARE $Orders List of Module.Order = empty;
-  DECLARE $Average Decimal = 0;
-
   RETRIEVE $Orders FROM Module.Order;
 
-  $Average = AGGREGATE $Orders AVERAGE OF Amount;
+  $Average = AVERAGE($Orders.Amount);
   RETURN $Average;
 END;
 /
+```
+
+### Min/Max
+
+```mdl
+$MinPrice = MINIMUM($Products.Price);
+$MaxPrice = MAXIMUM($Products.Price);
 ```
 
 ## List Operations
