@@ -131,7 +131,8 @@ func (e *Executor) domainModelToMermaid(moduleName string) error {
 		}
 
 		// Determine relationship cardinality
-		rel := "||--o{" // Reference: one-to-many
+		// Parent (FROM) is the owner/many side, Child (TO) is the referenced/one side
+		rel := "}o--||" // Reference: many-to-one (parent=*, child=1)
 		if assoc.Type == domainmodel.AssociationTypeReferenceSet {
 			rel = "}o--o{" // ReferenceSet: many-to-many
 		}

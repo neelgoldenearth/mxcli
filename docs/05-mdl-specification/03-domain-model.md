@@ -243,8 +243,8 @@ CREATE ASSOCIATION <Module>.<AssociationName>
 | Property | MDL Clause | Description |
 |----------|------------|-------------|
 | Name | `Module.Name` | Association identifier |
-| Parent | `FROM Entity` | Parent (one) side of relationship |
-| Child | `TO Entity` | Child (many) side of relationship |
+| Parent | `FROM Entity` | Parent (owner/many) side of relationship |
+| Child | `TO Entity` | Child (referenced/one) side of relationship |
 | Type | `TYPE Reference/ReferenceSet` | Cardinality type |
 | Owner | `OWNER` | Which side can modify |
 | Delete Behavior | `DELETE_BEHAVIOR` | What happens on delete |

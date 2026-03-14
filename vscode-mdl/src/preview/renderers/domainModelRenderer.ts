@@ -97,20 +97,20 @@ export function domainModelRendererJs(): string {
 								var prev = pts[pts.length - 2];
 
 								if (assocData) {
-									// Source end (child/owner): "*" always
+									// Source end (child/referenced entity): "1" for reference, "*" for referenceSet
 									var srcAngle = Math.atan2(second.y - first.y, second.x - first.x);
 									var srcPerp = srcAngle + Math.PI / 2;
+									var srcLabel = assocData.type === 'referenceSet' ? '*' : '1';
 									var srcLx = first.x + 14 * Math.cos(srcAngle) + 10 * Math.cos(srcPerp);
 									var srcLy = first.y + 14 * Math.sin(srcAngle) + 10 * Math.sin(srcPerp);
-									svg += '<text x="' + srcLx.toFixed(1) + '" y="' + srcLy.toFixed(1) + '" font-size="10" fill="' + secondaryColor + '" text-anchor="middle" font-family="' + fontFamily + '">*</text>';
+									svg += '<text x="' + srcLx.toFixed(1) + '" y="' + srcLy.toFixed(1) + '" font-size="10" fill="' + secondaryColor + '" text-anchor="middle" font-family="' + fontFamily + '">' + srcLabel + '</text>';
 
-									// Target end (parent): "1" for reference, "*" for referenceSet
+									// Target end (parent/owner entity): "*" always
 									var tgtAngle = Math.atan2(prev.y - last.y, prev.x - last.x);
 									var tgtPerp = tgtAngle + Math.PI / 2;
-									var tgtLabel = assocData.type === 'referenceSet' ? '*' : '1';
 									var tgtLx = last.x + 14 * Math.cos(tgtAngle) + 10 * Math.cos(tgtPerp);
 									var tgtLy = last.y + 14 * Math.sin(tgtAngle) + 10 * Math.sin(tgtPerp);
-									svg += '<text x="' + tgtLx.toFixed(1) + '" y="' + tgtLy.toFixed(1) + '" font-size="10" fill="' + secondaryColor + '" text-anchor="middle" font-family="' + fontFamily + '">' + tgtLabel + '</text>';
+									svg += '<text x="' + tgtLx.toFixed(1) + '" y="' + tgtLy.toFixed(1) + '" font-size="10" fill="' + secondaryColor + '" text-anchor="middle" font-family="' + fontFamily + '">*</text>';
 								}
 							}
 
