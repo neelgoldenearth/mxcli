@@ -705,7 +705,7 @@ func buildShowPageStatement(ctx parser.IShowPageStatementContext) *ast.ShowPageS
 
 // buildShowPageArgList converts showPageArgList context to ShowPageArg slice.
 // Grammar: showPageArg (COMMA showPageArg)*
-// showPageArg: VARIABLE EQUALS (VARIABLE | expression)
+// showPageArg: VARIABLE EQUALS (VARIABLE | expression) | identifierOrKeyword COLON expression
 func buildShowPageArgList(ctx parser.IShowPageArgListContext) []ast.ShowPageArg {
 	if ctx == nil {
 		return nil
@@ -717,18 +717,23 @@ func buildShowPageArgList(ctx parser.IShowPageArgListContext) []ast.ShowPageArg 
 		arg := argCtx.(*parser.ShowPageArgContext)
 		spa := ast.ShowPageArg{}
 
-		// Get parameter name (first VARIABLE)
-		vars := arg.AllVARIABLE()
-		if len(vars) >= 1 {
-			spa.ParamName = strings.TrimPrefix(vars[0].GetText(), "$")
-		}
-
-		// Get value (second VARIABLE or expression)
-		if len(vars) >= 2 {
-			// Value is a variable reference
-			spa.Value = &ast.VariableExpr{Name: strings.TrimPrefix(vars[1].GetText(), "$")}
-		} else if expr := arg.Expression(); expr != nil {
-			spa.Value = buildExpression(expr)
+		if iok := arg.IdentifierOrKeyword(); iok != nil {
+			// Widget-style: Param: $value
+			spa.ParamName = identifierOrKeywordText(iok)
+			if expr := arg.Expression(); expr != nil {
+				spa.Value = buildExpression(expr)
+			}
+		} else {
+			// Canonical: $Param = $value
+			vars := arg.AllVARIABLE()
+			if len(vars) >= 1 {
+				spa.ParamName = strings.TrimPrefix(vars[0].GetText(), "$")
+			}
+			if len(vars) >= 2 {
+				spa.Value = &ast.VariableExpr{Name: strings.TrimPrefix(vars[1].GetText(), "$")}
+			} else if expr := arg.Expression(); expr != nil {
+				spa.Value = buildExpression(expr)
+			}
 		}
 
 		args = append(args, spa)

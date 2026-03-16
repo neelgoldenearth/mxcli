@@ -2381,6 +2381,7 @@ CREATE PAGE MfTest.ProductDetail
 
 /**
  * M090: Annotations on SHOW PAGE activity.
+ * Uses the canonical microflow syntax: $Param = $value
  */
 CREATE MICROFLOW MfTest.M090_AnnotatedShowPage (
   $Product: MfTest.Product
@@ -2391,6 +2392,18 @@ BEGIN
   @color Purple
   @annotation 'Shows the product edit page'
   SHOW PAGE MfTest.ProductDetail($Product = $Product);
+END;
+/
+
+/**
+ * M090b: SHOW PAGE using widget-style parameter syntax.
+ * Both ($Param = $value) and (Param: $value) are accepted in microflows.
+ */
+CREATE MICROFLOW MfTest.M090b_ShowPageWidgetStyle (
+  $Product: MfTest.Product
+)
+BEGIN
+  SHOW PAGE MfTest.ProductDetail(Product: $Product);
 END;
 /
 

@@ -105,6 +105,52 @@ func TestQuotedIdentifierInWidgetAttribute(t *testing.T) {
 	}
 }
 
+func TestShowPageWidgetStyleArgsInMicroflow(t *testing.T) {
+	// Widget-style Param: $value syntax should be accepted in microflow SHOW PAGE
+	input := `CREATE MICROFLOW Test.MF_ShowPage ()
+BEGIN
+  DECLARE $Item Test.Item;
+  SHOW PAGE Test.EditPage(Item: $Item);
+END;`
+
+	prog, errs := Build(input)
+	if len(errs) > 0 {
+		for _, err := range errs {
+			t.Errorf("Parse error: %v", err)
+		}
+		t.Fatal("Widget-style (Param: $value) should be accepted in microflow SHOW PAGE")
+	}
+
+	stmt := prog.Statements[0].(*ast.CreateMicroflowStmt)
+	showPage, ok := stmt.Body[1].(*ast.ShowPageStmt)
+	if !ok {
+		t.Fatalf("Expected ShowPageStmt, got %T", stmt.Body[1])
+	}
+	if len(showPage.Arguments) != 1 {
+		t.Fatalf("Expected 1 argument, got %d", len(showPage.Arguments))
+	}
+	if showPage.Arguments[0].ParamName != "Item" {
+		t.Errorf("Expected param name 'Item', got %q", showPage.Arguments[0].ParamName)
+	}
+}
+
+func TestShowPageMicroflowStyleArgsInWidget(t *testing.T) {
+	// Microflow-style $Param = $value syntax should be accepted in widget Action
+	input := `CREATE PAGE Test.TestPage (Title: 'Test', Layout: Test.Layout) {
+  DATAVIEW dv1 {
+    ACTIONBUTTON btn1 (Caption: 'Edit', Action: SHOW_PAGE Test.EditPage($Item = $currentObject))
+  }
+}`
+
+	_, errs := Build(input)
+	if len(errs) > 0 {
+		for _, err := range errs {
+			t.Errorf("Parse error: %v", err)
+		}
+		t.Fatal("Microflow-style ($Param = $value) should be accepted in widget Action")
+	}
+}
+
 // findQualifiedNameExpr recursively searches an expression tree for a QualifiedNameExpr.
 func findQualifiedNameExpr(expr ast.Expression) *ast.QualifiedNameExpr {
 	switch e := expr.(type) {

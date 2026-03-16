@@ -134,6 +134,29 @@ END;`
 	}
 }
 
+// TestValidateDuplicateVariableDeclareCreate verifies that DECLARE followed by
+// CREATE for the same variable is caught as a duplicate (CE0111).
+func TestValidateDuplicateVariableDeclareCreate(t *testing.T) {
+	input := `CREATE MICROFLOW Test.MF_DeclareCreate ()
+BEGIN
+  DECLARE $NewTodo Test.Todo;
+  $NewTodo = CREATE Test.Todo();
+END;`
+
+	errors := validateMicroflowFromMDL(t, input)
+
+	found := false
+	for _, e := range errors {
+		if strings.Contains(e, "duplicate") && strings.Contains(e, "NewTodo") {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Errorf("Expected duplicate variable error for $NewTodo, got errors: %v", errors)
+	}
+}
+
 // TestDescribeEnumerationInSubfolder verifies that DESCRIBE ENUMERATION works
 // for enumerations that have been moved to subfolders.
 // Bug #4: describeEnumeration used GetModuleName(containerID) which fails for

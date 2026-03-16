@@ -1127,7 +1127,8 @@ showPageArgList
     ;
 
 showPageArg
-    : VARIABLE EQUALS (VARIABLE | expression)
+    : VARIABLE EQUALS (VARIABLE | expression)       // $Param = $value (canonical)
+    | identifierOrKeyword COLON expression           // Param: $value (widget-style, also accepted)
     ;
 
 closePageStatement
@@ -1717,7 +1718,8 @@ microflowArgsV3
     ;
 
 microflowArgV3
-    : IDENTIFIER COLON expression
+    : IDENTIFIER COLON expression                    // Param: $value (canonical)
+    | VARIABLE EQUALS expression                     // $Param = $value (microflow-style, also accepted)
     ;
 
 // V3 Attribute path: Name, Product/Category, "Order" (quoted to escape reserved words)

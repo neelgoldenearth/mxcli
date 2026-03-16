@@ -720,7 +720,11 @@ func buildMicroflowArgV3(ctx parser.IMicroflowArgV3Context) ast.FlowArgV3 {
 	argCtx := ctx.(*parser.MicroflowArgV3Context)
 	arg := ast.FlowArgV3{}
 
-	if id := argCtx.IDENTIFIER(); id != nil {
+	if v := argCtx.VARIABLE(); v != nil {
+		// Microflow-style: $Param = $value
+		arg.Name = strings.TrimPrefix(v.GetText(), "$")
+	} else if id := argCtx.IDENTIFIER(); id != nil {
+		// Widget-style: Param: $value
 		arg.Name = id.GetText()
 	}
 	if expr := argCtx.Expression(); expr != nil {

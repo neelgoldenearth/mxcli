@@ -196,6 +196,7 @@ ACTIONBUTTON widgetName (Caption: 'Caption', Action: ACTION_TYPE [, ButtonStyle:
 - `Action: MICROFLOW Module.MicroflowName(Param: $value)` - Call microflow with parameters
 - `Action: SHOW_PAGE Module.PageName` - Navigate to page
 - `Action: SHOW_PAGE Module.PageName(Param: $value)` - Navigate with parameters
+- `Action: SHOW_PAGE Module.PageName($Param = $value)` - Also accepted (microflow-style)
 - `Action: CREATE_OBJECT Module.Entity THEN SHOW_PAGE Module.PageName` - Create and navigate
 
 **Button Styles:**

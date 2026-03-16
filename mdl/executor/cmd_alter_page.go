@@ -564,6 +564,13 @@ func (e *Executor) applyInsertWidgetWith(rawData map[string]any, op *ast.InsertW
 		return fmt.Errorf("widget %q not found", op.TargetName)
 	}
 
+	// Check for duplicate widget names before building
+	for _, w := range op.Widgets {
+		if w.Name != "" && find(rawData, w.Name) != nil {
+			return fmt.Errorf("duplicate widget name '%s': a widget with this name already exists on the page", w.Name)
+		}
+	}
+
 	// Find entity context from enclosing DataView/DataGrid/ListView
 	entityCtx := findEnclosingEntityContext(rawData, op.TargetName)
 
@@ -633,6 +640,13 @@ func (e *Executor) applyReplaceWidgetWith(rawData map[string]any, op *ast.Replac
 	result := find(rawData, op.WidgetName)
 	if result == nil {
 		return fmt.Errorf("widget %q not found", op.WidgetName)
+	}
+
+	// Check for duplicate widget names (skip the widget being replaced)
+	for _, w := range op.NewWidgets {
+		if w.Name != "" && w.Name != op.WidgetName && find(rawData, w.Name) != nil {
+			return fmt.Errorf("duplicate widget name '%s': a widget with this name already exists on the page", w.Name)
+		}
 	}
 
 	// Find entity context from enclosing DataView/DataGrid/ListView

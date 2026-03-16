@@ -145,7 +145,7 @@ AUTHENTICATION Basic, Session
 | Retrieve | `RETRIEVE $Var FROM Module.Entity [WHERE condition];` | |
 | Call microflow | `$Result = CALL MICROFLOW Module.Name (Param = $value);` | |
 | Call nanoflow | `$Result = CALL NANOFLOW Module.Name (Param = $value);` | |
-| Show page | `SHOW PAGE Module.PageName ($Param = $value);` | |
+| Show page | `SHOW PAGE Module.PageName ($Param = $value);` | Also accepts `(Param: $value)` |
 | Close page | `CLOSE PAGE;` | |
 | Validation | `VALIDATION FEEDBACK $Entity/Attribute MESSAGE 'message';` | Requires attribute path + MESSAGE |
 | Log | `LOG INFO\|WARNING\|ERROR [NODE 'name'] 'message';` | |

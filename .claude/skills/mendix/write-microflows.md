@@ -659,6 +659,32 @@ CALL MICROFLOW Module.SendEmail(EmailAddress = $Email, Subject = $Title);  -- BU
 
 When calling microflows, always check the target's parameter list. Use `DESCRIBE MICROFLOW Module.Name` to see the exact parameter names.
 
+## Page Navigation
+
+### SHOW PAGE
+
+```mdl
+-- Open page with parameter (canonical syntax)
+SHOW PAGE Module.EditPage($Product = $Product);
+
+-- Widget-style syntax also accepted in microflows
+SHOW PAGE Module.EditPage(Product: $Product);
+```
+
+Both `($Param = $value)` and `(Param: $value)` syntaxes are accepted in microflow SHOW PAGE statements. Similarly, widget Action: properties accept both `SHOW_PAGE Module.Page(Param: $value)` and `SHOW_PAGE Module.Page($Param = $value)`.
+
+### CLOSE PAGE
+
+```mdl
+CLOSE PAGE;
+```
+
+### SHOW HOME PAGE
+
+```mdl
+SHOW HOME PAGE;
+```
+
 ## Implicit Variable Creation (CE0111 Duplicate Variable)
 
 These statements **implicitly create a new variable** with the name on the left side:
@@ -1003,6 +1029,14 @@ $Results = EXECUTE DATABASE QUERY Module.Conn.QueryName
 EXECUTE DATABASE QUERY Module.Conn.QueryName;
 ```
 **Note:** Only `ON ERROR ROLLBACK` is supported (the default). `ON ERROR CONTINUE` is not available for this action.
+
+### Page Navigation Pattern
+```mdl
+SHOW PAGE Module.Page($Param = $value);               -- Canonical
+SHOW PAGE Module.Page(Param: $value);                  -- Widget-style (also valid)
+CLOSE PAGE;
+SHOW HOME PAGE;
+```
 
 ### Error Handling Pattern
 ```mdl
