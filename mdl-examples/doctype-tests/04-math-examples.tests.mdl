@@ -14,7 +14,7 @@
 CREATE MICROFLOW Math.UT_IsPrime_17_ReturnsTrue ()
 RETURNS String AS $TestResult
 FOLDER 'Tests/Math'
-URL 'UT_IsPrime_17_ReturnsTrue'
+COMMENT'UT_IsPrime_17_ReturnsTrue'
 BEGIN
   DECLARE $TestResult String = empty;
   DECLARE $Input Integer = 17;
@@ -27,7 +27,7 @@ BEGIN
   ELSE
     SET $TestResult = 'FAIL: IsPrime(17) returned ' + toString($Actual) + ', expected true';
   END IF;
-  LOG INFO NODE 'TestSuite' '{1}' OBJECTS[$TestResult];
+  LOG INFO NODE 'TestSuite' '{1}' WITH ({1} = $TestResult);
 
   RETURN $TestResult;
 END;
@@ -45,7 +45,7 @@ END;
 CREATE MICROFLOW Math.UT_IsPrime_20_ReturnsFalse ()
 RETURNS String AS $TestResult
 FOLDER 'Tests/Math'
-URL 'UT_IsPrime_20_ReturnsFalse'
+COMMENT'UT_IsPrime_20_ReturnsFalse'
 BEGIN
   DECLARE $TestResult String = empty;
   DECLARE $Input Integer = 20;
@@ -58,7 +58,7 @@ BEGIN
   ELSE
     SET $TestResult = 'FAIL: IsPrime(20) returned ' + toString($Actual) + ', expected false';
   END IF;
-  LOG INFO NODE 'TestSuite' '{1}' OBJECTS[$TestResult];
+  LOG INFO NODE 'TestSuite' '{1}' WITH ({1} = $TestResult);
 
   RETURN $TestResult;
 END;
@@ -76,7 +76,7 @@ END;
 CREATE MICROFLOW Math.UT_IsPrime_2_ReturnsTrue ()
 RETURNS String AS $TestResult
 FOLDER 'Tests/Math'
-URL 'UT_IsPrime_2_ReturnsTrue'
+COMMENT'UT_IsPrime_2_ReturnsTrue'
 BEGIN
   DECLARE $TestResult String = empty;
   DECLARE $Input Integer = 2;
@@ -89,7 +89,7 @@ BEGIN
   ELSE
     SET $TestResult = 'FAIL: IsPrime(2) returned ' + toString($Actual) + ', expected true';
   END IF;
-  LOG INFO NODE 'TestSuite' '{1}' OBJECTS[$TestResult];
+  LOG INFO NODE 'TestSuite' '{1}' WITH ({1} = $TestResult);
 
   RETURN $TestResult;
 END;
@@ -107,7 +107,7 @@ END;
 CREATE MICROFLOW Math.UT_IsPrime_1_ReturnsFalse ()
 RETURNS String AS $TestResult
 FOLDER 'Tests/Math'
-URL 'UT_IsPrime_1_ReturnsFalse'
+COMMENT'UT_IsPrime_1_ReturnsFalse'
 BEGIN
   DECLARE $TestResult String = empty;
   DECLARE $Input Integer = 1;
@@ -120,7 +120,7 @@ BEGIN
   ELSE
     SET $TestResult = 'FAIL: IsPrime(1) returned ' + toString($Actual) + ', expected false';
   END IF;
-  LOG INFO NODE 'TestSuite' '{1}' OBJECTS[$TestResult];
+  LOG INFO NODE 'TestSuite' '{1}' WITH ({1} = $TestResult);
 
   RETURN $TestResult;
 END;
@@ -138,7 +138,7 @@ END;
 CREATE MICROFLOW Math.UT_IsPrime_0_ReturnsFalse ()
 RETURNS String AS $TestResult
 FOLDER 'Tests/Math'
-URL 'UT_IsPrime_0_ReturnsFalse'
+COMMENT'UT_IsPrime_0_ReturnsFalse'
 BEGIN
   DECLARE $TestResult String = empty;
   DECLARE $Input Integer = 0;
@@ -151,7 +151,7 @@ BEGIN
   ELSE
     SET $TestResult = 'FAIL: IsPrime(0) returned ' + toString($Actual) + ', expected false';
   END IF;
-  LOG INFO NODE 'TestSuite' '{1}' OBJECTS[$TestResult];
+  LOG INFO NODE 'TestSuite' '{1}' WITH ({1} = $TestResult);
 
   RETURN $TestResult;
 END;
@@ -169,7 +169,7 @@ END;
 CREATE MICROFLOW Math.UT_IsPrime_Negative_ReturnsFalse ()
 RETURNS String AS $TestResult
 FOLDER 'Tests/Math'
-URL 'UT_IsPrime_Negative_ReturnsFalse'
+COMMENT'UT_IsPrime_Negative_ReturnsFalse'
 BEGIN
   DECLARE $TestResult String = empty;
   DECLARE $Input Integer = -5;
@@ -182,7 +182,7 @@ BEGIN
   ELSE
     SET $TestResult = 'FAIL: IsPrime(-5) returned ' + toString($Actual) + ', expected false';
   END IF;
-  LOG INFO NODE 'TestSuite' '{1}' OBJECTS[$TestResult];
+  LOG INFO NODE 'TestSuite' '{1}' WITH ({1} = $TestResult);
 
   RETURN $TestResult;
 END;
@@ -197,7 +197,7 @@ END;
 CREATE MICROFLOW Math.TestSuite_IsPrime ()
 RETURNS String AS $Summary
 FOLDER 'Tests/Math'
-URL 'TestSuite_IsPrime'
+COMMENT'TestSuite_IsPrime'
 BEGIN
   DECLARE $TestsPassed Integer = 0;
   DECLARE $TotalTests Integer = 6;
@@ -235,7 +235,7 @@ BEGIN
   END IF;
 
   SET $Summary = 'Test Suite: IsPrime - Passed: ' + toString($TestsPassed) + ' / Total: ' + toString($TotalTests);
-  LOG INFO NODE 'TestSuite' '{1}' OBJECTS[$Summary];
+  LOG INFO NODE 'TestSuite' '{1}' WITH ({1} = $Summary);
 
   RETURN $Summary;
 END;
@@ -257,7 +257,7 @@ END;
 CREATE MICROFLOW Math.UT_Fibonacci_0_Returns0 ()
 RETURNS String AS $TestResult
 FOLDER 'Tests/Math'
-URL 'UT_Fibonacci_0_Returns0'
+COMMENT'UT_Fibonacci_0_Returns0'
 BEGIN
   DECLARE $TestResult String = empty;
   DECLARE $Input Integer = 0;
@@ -270,7 +270,7 @@ BEGIN
   ELSE
     SET $TestResult = 'FAIL: Fibonacci(0) returned ' + toString($Actual) + ', expected 0';
   END IF;
-  LOG INFO NODE 'TestSuite' '{1}' OBJECTS[$TestResult];
+  LOG INFO NODE 'TestSuite' '{1}' WITH ({1} = $TestResult);
 
   RETURN $TestResult;
 END;
@@ -288,7 +288,7 @@ END;
 CREATE MICROFLOW Math.UT_Fibonacci_1_Returns1 ()
 RETURNS String AS $TestResult
 FOLDER 'Tests/Math'
-URL 'UT_Fibonacci_1_Returns1'
+COMMENT'UT_Fibonacci_1_Returns1'
 BEGIN
   DECLARE $TestResult String = empty;
   DECLARE $Input Integer = 1;
@@ -301,7 +301,7 @@ BEGIN
   ELSE
     SET $TestResult = 'FAIL: Fibonacci(1) returned ' + toString($Actual) + ', expected 1';
   END IF;
-  LOG INFO NODE 'TestSuite' '{1}' OBJECTS[$TestResult];
+  LOG INFO NODE 'TestSuite' '{1}' WITH ({1} = $TestResult);
 
   RETURN $TestResult;
 END;
@@ -319,7 +319,7 @@ END;
 CREATE MICROFLOW Math.UT_Fibonacci_10_Returns55 ()
 RETURNS String AS $TestResult
 FOLDER 'Tests/Math'
-URL 'UT_Fibonacci_10_Returns55'
+COMMENT'UT_Fibonacci_10_Returns55'
 BEGIN
   DECLARE $TestResult String = empty;
   DECLARE $Input Integer = 10;
@@ -332,7 +332,7 @@ BEGIN
   ELSE
     SET $TestResult = 'FAIL: Fibonacci(10) returned ' + toString($Actual) + ', expected 55';
   END IF;
-  LOG INFO NODE 'TestSuite' '{1}' OBJECTS[$TestResult];
+  LOG INFO NODE 'TestSuite' '{1}' WITH ({1} = $TestResult);
 
   RETURN $TestResult;
 END;
@@ -350,7 +350,7 @@ END;
 CREATE MICROFLOW Math.UT_Fibonacci_20_Returns6765 ()
 RETURNS String AS $TestResult
 FOLDER 'Tests/Math'
-URL 'UT_Fibonacci_20_Returns6765'
+COMMENT'UT_Fibonacci_20_Returns6765'
 BEGIN
   DECLARE $TestResult String = empty;
   DECLARE $Input Integer = 20;
@@ -363,7 +363,7 @@ BEGIN
   ELSE
     SET $TestResult = 'FAIL: Fibonacci(20) returned ' + toString($Actual) + ', expected 6765';
   END IF;
-  LOG INFO NODE 'TestSuite' '{1}' OBJECTS[$TestResult];
+  LOG INFO NODE 'TestSuite' '{1}' WITH ({1} = $TestResult);
 
   RETURN $TestResult;
 END;
@@ -381,7 +381,7 @@ END;
 CREATE MICROFLOW Math.UT_Fibonacci_Negative_Returns0 ()
 RETURNS String AS $TestResult
 FOLDER 'Tests/Math'
-URL 'UT_Fibonacci_Negative_Returns0'
+COMMENT'UT_Fibonacci_Negative_Returns0'
 BEGIN
   DECLARE $TestResult String = empty;
   DECLARE $Input Integer = -5;
@@ -394,7 +394,7 @@ BEGIN
   ELSE
     SET $TestResult = 'FAIL: Fibonacci(-5) returned ' + toString($Actual) + ', expected 0';
   END IF;
-  LOG INFO NODE 'TestSuite' '{1}' OBJECTS[$TestResult];
+  LOG INFO NODE 'TestSuite' '{1}' WITH ({1} = $TestResult);
 
   RETURN $TestResult;
 END;
@@ -409,7 +409,7 @@ END;
 CREATE MICROFLOW Math.TestSuite_Fibonacci ()
 RETURNS String AS $Summary
 FOLDER 'Tests/Math'
-URL 'TestSuite_Fibonacci'
+COMMENT'TestSuite_Fibonacci'
 BEGIN
   DECLARE $TestsPassed Integer = 0;
   DECLARE $TotalTests Integer = 5;
@@ -442,7 +442,7 @@ BEGIN
   END IF;
 
   SET $Summary = 'Test Suite: Fibonacci - Passed: ' + toString($TestsPassed) + ' / Total: ' + toString($TotalTests);
-  LOG INFO NODE 'TestSuite' '{1}' OBJECTS[$Summary];
+  LOG INFO NODE 'TestSuite' '{1}' WITH ({1} = $Summary);
 
   RETURN $Summary;
 END;
@@ -460,16 +460,16 @@ END;
 CREATE MICROFLOW Math.TestSuite_All ()
 RETURNS String AS $Summary
 FOLDER 'Tests/Math'
-URL 'TestSuite_All'
+COMMENT'TestSuite_All'
 BEGIN
   DECLARE $Summary String = '';
 
   -- Run all test suites
   $IsPrimeResult = CALL MICROFLOW Math.TestSuite_IsPrime();
-  LOG INFO NODE 'TestSuite' '{1}' OBJECTS[$IsPrimeResult];
+  LOG INFO NODE 'TestSuite' '{1}' WITH ({1} = $IsPrimeResult);
 
   $FibonacciResult = CALL MICROFLOW Math.TestSuite_Fibonacci();
-  LOG INFO NODE 'TestSuite' '{1}' OBJECTS[$FibonacciResult];
+  LOG INFO NODE 'TestSuite' '{1}' WITH ({1} = $FibonacciResult);
 
   SET $Summary = 'All Math Tests Complete. ' + $IsPrimeResult + ' | ' + $FibonacciResult;
 
@@ -478,7 +478,7 @@ END;
 /
 
 -- ============================================================================
--- Updated Test Runner Page
+-- Test Runner Page
 -- ============================================================================
 
 /**
@@ -487,54 +487,68 @@ END;
  * A dashboard to run all Math test microflows and view results.
  */
 CREATE PAGE Math.MathTestRunner
-TITLE 'Math Test Runner'
-LAYOUT 'Atlas_Core.Atlas_Default'
-URL 'mathtestrunner'
-FOLDER 'Tests/Math'
-BEGIN
-  LAYOUTGRID gridMain
-    ROW
-      COLUMN (DESKTOP_WIDTH 12)
-        DYNAMICTEXT titleHeader ( CONTENT 'Math Microflow Test Runner', RENDERMODE 'H2');
-        DYNAMICTEXT textDescription ( CONTENT 'Run unit tests for Math.IsPrime and Math.Fibonacci microflows', RENDERMODE 'Paragraph');
-    ROW
-      COLUMN (DESKTOP_WIDTH 12)
-        DYNAMICTEXT sectionAll ( CONTENT 'Run All Tests', RENDERMODE 'H4');
-    ROW
-      COLUMN (DESKTOP_WIDTH 4)
-        ACTIONBUTTON btnRunAll 'Run All Math Tests'
-          ACTION CALL_MICROFLOW 'Math.TestSuite_All' STYLE Primary;
-    ROW
-      COLUMN (DESKTOP_WIDTH 12)
-        DYNAMICTEXT sectionIsPrime ( CONTENT 'IsPrime Tests', RENDERMODE 'H4');
-    ROW
-      COLUMN (DESKTOP_WIDTH 3)
-        ACTIONBUTTON btnIsPrimeSuite 'Run IsPrime Suite'
-          ACTION CALL_MICROFLOW 'Math.TestSuite_IsPrime' STYLE Primary;
-      COLUMN (DESKTOP_WIDTH 3)
-        ACTIONBUTTON btnIsPrime17 'Test: 17 is prime'
-          ACTION CALL_MICROFLOW 'Math.UT_IsPrime_17_ReturnsTrue' STYLE Default;
-      COLUMN (DESKTOP_WIDTH 3)
-        ACTIONBUTTON btnIsPrime20 'Test: 20 not prime'
-          ACTION CALL_MICROFLOW 'Math.UT_IsPrime_20_ReturnsFalse' STYLE Default;
-      COLUMN (DESKTOP_WIDTH 3)
-        ACTIONBUTTON btnIsPrime2 'Test: 2 is prime'
-          ACTION CALL_MICROFLOW 'Math.UT_IsPrime_2_ReturnsTrue' STYLE Default;
-    ROW
-      COLUMN (DESKTOP_WIDTH 12)
-        DYNAMICTEXT sectionFibonacci ( CONTENT 'Fibonacci Tests', RENDERMODE 'H4');
-    ROW
-      COLUMN (DESKTOP_WIDTH 3)
-        ACTIONBUTTON btnFibSuite 'Run Fibonacci Suite'
-          ACTION CALL_MICROFLOW 'Math.TestSuite_Fibonacci' STYLE Primary;
-      COLUMN (DESKTOP_WIDTH 3)
-        ACTIONBUTTON btnFib0 'Test: F(0) = 0'
-          ACTION CALL_MICROFLOW 'Math.UT_Fibonacci_0_Returns0' STYLE Default;
-      COLUMN (DESKTOP_WIDTH 3)
-        ACTIONBUTTON btnFib10 'Test: F(10) = 55'
-          ACTION CALL_MICROFLOW 'Math.UT_Fibonacci_10_Returns55' STYLE Default;
-      COLUMN (DESKTOP_WIDTH 3)
-        ACTIONBUTTON btnFib20 'Test: F(20) = 6765'
-          ACTION CALL_MICROFLOW 'Math.UT_Fibonacci_20_Returns6765' STYLE Default;
-END;
+(
+  Title: 'Math Test Runner',
+  Layout: Atlas_Core.Atlas_Default,
+  Url: 'mathtestrunner',
+  Folder: 'Tests/Math'
+)
+{
+  LAYOUTGRID gridMain {
+    ROW rowTitle {
+      COLUMN colTitle (DesktopWidth: 12) {
+        DYNAMICTEXT titleHeader (Content: 'Math Microflow Test Runner', RenderMode: H2)
+        DYNAMICTEXT textDescription (Content: 'Run unit tests for Math.IsPrime and Math.Fibonacci microflows', RenderMode: Paragraph)
+      }
+    }
+    ROW rowAll {
+      COLUMN colAll (DesktopWidth: 12) {
+        DYNAMICTEXT sectionAll (Content: 'Run All Tests', RenderMode: H4)
+      }
+    }
+    ROW rowAllBtn {
+      COLUMN colAllBtn (DesktopWidth: 4) {
+        ACTIONBUTTON btnRunAll (Caption: 'Run All Math Tests', Action: MICROFLOW Math.TestSuite_All, ButtonStyle: Primary)
+      }
+    }
+    ROW rowPrimeHeader {
+      COLUMN colPrimeHeader (DesktopWidth: 12) {
+        DYNAMICTEXT sectionIsPrime (Content: 'IsPrime Tests', RenderMode: H4)
+      }
+    }
+    ROW rowPrimeTests {
+      COLUMN colPrimeSuite (DesktopWidth: 3) {
+        ACTIONBUTTON btnIsPrimeSuite (Caption: 'Run IsPrime Suite', Action: MICROFLOW Math.TestSuite_IsPrime, ButtonStyle: Primary)
+      }
+      COLUMN colPrime17 (DesktopWidth: 3) {
+        ACTIONBUTTON btnIsPrime17 (Caption: 'Test: 17 is prime', Action: MICROFLOW Math.UT_IsPrime_17_ReturnsTrue, ButtonStyle: Default)
+      }
+      COLUMN colPrime20 (DesktopWidth: 3) {
+        ACTIONBUTTON btnIsPrime20 (Caption: 'Test: 20 not prime', Action: MICROFLOW Math.UT_IsPrime_20_ReturnsFalse, ButtonStyle: Default)
+      }
+      COLUMN colPrime2 (DesktopWidth: 3) {
+        ACTIONBUTTON btnIsPrime2 (Caption: 'Test: 2 is prime', Action: MICROFLOW Math.UT_IsPrime_2_ReturnsTrue, ButtonStyle: Default)
+      }
+    }
+    ROW rowFibHeader {
+      COLUMN colFibHeader (DesktopWidth: 12) {
+        DYNAMICTEXT sectionFibonacci (Content: 'Fibonacci Tests', RenderMode: H4)
+      }
+    }
+    ROW rowFibTests {
+      COLUMN colFibSuite (DesktopWidth: 3) {
+        ACTIONBUTTON btnFibSuite (Caption: 'Run Fibonacci Suite', Action: MICROFLOW Math.TestSuite_Fibonacci, ButtonStyle: Primary)
+      }
+      COLUMN colFib0 (DesktopWidth: 3) {
+        ACTIONBUTTON btnFib0 (Caption: 'Test: F(0) = 0', Action: MICROFLOW Math.UT_Fibonacci_0_Returns0, ButtonStyle: Default)
+      }
+      COLUMN colFib10 (DesktopWidth: 3) {
+        ACTIONBUTTON btnFib10 (Caption: 'Test: F(10) = 55', Action: MICROFLOW Math.UT_Fibonacci_10_Returns55, ButtonStyle: Default)
+      }
+      COLUMN colFib20 (DesktopWidth: 3) {
+        ACTIONBUTTON btnFib20 (Caption: 'Test: F(20) = 6765', Action: MICROFLOW Math.UT_Fibonacci_20_Returns6765, ButtonStyle: Default)
+      }
+    }
+  }
+};
 /

@@ -30,7 +30,6 @@ CREATE MICROFLOW Math.IsPrime (
   $Number: Integer
 ) RETURNS Boolean AS $IsPrime
 FOLDER 'Math'
-URL 'IsPrime'
 BEGIN
   -- Edge Case 1: Handle numbers <= 1
   IF $Number <= 1 THEN
@@ -63,7 +62,7 @@ BEGIN
   BEGIN
     -- Test if current divisor divides the number evenly
     IF $Number mod $Divisor = 0 THEN
-      LOG INFO NODE 'Math' 'Found divisor: {1}, not prime' OBJECTS [toString($Divisor)];
+      LOG INFO NODE 'Math' 'Found divisor: {1}, not prime' WITH ({1} = $Divisor);
       RETURN false;
     END IF;
 
@@ -72,7 +71,7 @@ BEGIN
   END WHILE;
 
   -- No divisors found - number is prime
-  LOG INFO NODE 'Math' 'Number {1} is prime' OBJECTS [toString($Number)];
+  LOG INFO NODE 'Math' 'Number {1} is prime' WITH ({1} = $Number);
 
   RETURN true;
 END;
@@ -96,7 +95,6 @@ CREATE MICROFLOW Math.Fibonacci (
   $N: Integer
 ) RETURNS Long AS $Result
 FOLDER 'Math'
-URL 'Fibonacci'
 BEGIN
   -- Validation: Check for negative input
   IF $N < 0 THEN
@@ -122,7 +120,7 @@ BEGIN
   DECLARE $Previous1 Long = 1;
   DECLARE $Current Long = 0;
   DECLARE $Counter Integer = 2;
-  LOG INFO NODE 'Math' 'Calculating Fibonacci({1})' OBJECTS [toString($N)];
+  LOG INFO NODE 'Math' 'Calculating Fibonacci({1})' WITH ({1} = $N);
 
   -- Main iteration loop: Calculate F(2) through F(N)
   -- Uses sliding window: shift values after each calculation
@@ -130,7 +128,7 @@ BEGIN
   BEGIN
     -- Calculate current Fibonacci number using recurrence relation
     SET $Current = $Previous1 + $Previous2;
-    LOG DEBUG NODE 'Math' 'F({1}) = {2}' OBJECTS [toString($Counter), toString($Current)];
+    LOG DEBUG NODE 'Math' 'F({1}) = {2}' WITH ({1} = $Counter, {2} = $Current);
 
     -- Slide the window: shift values for next iteration
     SET $Previous2 = $Previous1;
@@ -140,7 +138,7 @@ BEGIN
 
   -- Store final result and return
   SET $Result = $Current;
-  LOG INFO NODE 'Math' 'Fibonacci({1}) = {2}' OBJECTS [toString($N), toString($Result)];
+  LOG INFO NODE 'Math' 'Fibonacci({1}) = {2}' WITH ({1} = $N, {2} = $Result);
   RETURN $Result;
 END;
 /
